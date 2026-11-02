@@ -36,6 +36,8 @@ Then open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
 The app creates `database.db` in the project directory on startup. It stores check history and reports locally; it is not associated with individual user accounts.
 
+Source files use UTF-8, and the VS Code workspace is configured to open text files with that encoding. `database.db` is a binary SQLite database, not a text or source-code file; inspect it with a SQLite viewer or through the app rather than opening it as text.
+
 ## Keep the local website running on Windows
 
 To start Scam Shield automatically when you sign in to Windows and open it in your browser, run this once from PowerShell in the project directory:
