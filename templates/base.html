@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2d">
+  <meta name="description" content="Scam Shield helps you review suspicious links, emails, and internship certificates.">
+  <title>{% block title %}Scam Shield{% endblock %} · Scam Shield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('home') }}">
+        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.8 20 6v5.5c0 5.2-3.5 8.5-8 10.1-4.5-1.6-8-4.9-8-10.1V6l8-3.2Z"/><path d="m8.6 12 2.1 2.1 4.7-4.8"/></svg></span>
+        <span class="brand-name">scam<span>shield</span></span>
+      </a>
+
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{{ url_for('home') }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-link {% if active_page == 'check' %}active{% endif %}" href="{{ url_for('check_page') }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3M8 10.8h5.6M10.8 8v5.6"/></svg>
+          <span>New check</span>
+        </a>
+        <a class="nav-link {% if active_page == 'history' %}active{% endif %}" href="{{ url_for('history_page') }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2M4.2 5.8v4h4"/></svg>
+          <span>Check history</span>
+        </a>
+        <a class="nav-link {% if active_page == 'reports' %}active{% endif %}" href="{{ url_for('reports_page') }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.8h9l5 5v11.4H5z"/><path d="M14 3.8v5h5M8.5 13h7M8.5 16.5h7"/></svg>
+          <span>Community reports</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-tip">
+        <span class="tip-icon" aria-hidden="true">!</span>
+        <p><strong>Stay alert</strong><br>Never pay a fee to get a job or internship.</p>
+      </div>
+      <div class="sidebar-footer"><span class="online-dot"></span> Local protection workspace</div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-separator">/</span><strong>{% block breadcrumb %}Dashboard{% endblock %}</strong></div>
+        <div class="topbar-right"><span class="secure-label"><span class="online-dot"></span> Private local database</span><span class="avatar" aria-label="Scam Shield">S</span></div>
+      </header>
+      <main class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-stack">
+              {% for category, message in messages %}
+                <p class="flash-message {{ category }}" role="status">{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="app-footer"><span>SCAM SHIELD</span><span>Signals, not certainty. Always verify independently.</span></footer>
+    </div>
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}New check{% endblock %}
+{% block breadcrumb %}New check{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">RISK SCANNER</p><h1>Check before you trust</h1><p class="page-subtitle">Review a website, sender email, or internship certificate ID.</p></div>
+</section>
+<section class="scan-layout">
+  <div class="panel scan-panel">
+    <div class="panel-heading"><div><p class="eyebrow">NEW SCAN</p><h2>Enter the details</h2></div><span class="scan-shield">✓</span></div>
+    <label for="type">What are you checking?</label>
+    <select id="type" class="form-control">
+      <option value="url" {% if request.args.get('kind') == 'url' %}selected{% endif %}>Website URL</option>
+      <option value="email" {% if request.args.get('kind') == 'email' %}selected{% endif %}>Email address</option>
+      <option value="certificate" {% if request.args.get('kind') == 'certificate' %}selected{% endif %}>Internship certificate ID</option>
+    </select>
+    <label for="value" id="valueLabel">Website address</label>
+    <input id="value" class="form-control" type="text" maxlength="2048" placeholder="e.g. company-careers.com" autocomplete="off" spellcheck="false">
+    <div id="certificateBox" class="certificate-box hidden">
+      <p class="certificate-option-note">Enter a certificate ID above, or upload a clear certificate photo below. Either option works.</p>
+      <div class="upload-divider"><span>OR UPLOAD A CERTIFICATE PHOTO</span></div>
+      <label class="upload-zone" for="certificateImage">
+        <span class="upload-icon" aria-hidden="true">↑</span>
+        <span><strong>Choose a certificate image</strong><small>JPG, PNG or WebP · up to 8 MB</small></span>
+      </label>
+      <input id="certificateImage" class="file-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+      <div id="imagePreviewBox" class="image-preview hidden">
+        <img id="imagePreview" alt="Selected certificate preview">
+        <span id="imageName"></span>
+        <button id="removeImage" class="remove-image" type="button" aria-label="Remove selected certificate image">×</button>
+      </div>
+      <p id="ocrStatus" class="ocr-status" role="status" aria-live="polite"></p>
+      <label for="certificateText">Recognized certificate text <span class="muted">(review or edit)</span></label>
+      <textarea id="certificateText" class="form-control certificate-text" maxlength="10000" rows="5" placeholder="The photo's readable text will appear here. You can correct it before scanning."></textarea>
+      <p class="privacy-note"><span>◈</span> Photo is processed in your browser and never uploaded. The recognized text is sent to this local app for analysis. OCR requires an internet connection to load its engine and English language data.</p>
+      <div id="extraBox" class="form-group"><label for="extra">Student name <span class="muted">(optional)</span></label><input id="extra" class="form-control" type="text" maxlength="120" placeholder="Name printed on the certificate" autocomplete="name"></div>
+    </div>
+    <button id="checkBtn" class="button button-primary scan-submit" type="button"><span class="button-label">Run safety check</span><span aria-hidden="true">→</span></button>
+    <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+    <div class="privacy-note"><span>◈</span> Checks run against local rules and reports. Your input is saved to this workspace's history.</div>
+  </div>
+  <aside class="scan-aside">
+    <div class="scan-aside-icon">✳</div><p class="eyebrow">A QUICK REMINDER</p><h2>Good scams look convincing.</h2><p>A familiar logo or professional email signature does not prove a message is genuine.</p>
+    <ul><li>Contact the organization using its official website.</li><li>Never pay a fee to secure a role.</li><li>Do not share passwords or one-time codes.</li></ul>
+  </aside>
+</section>
+<section id="result" class="panel result-card hidden" aria-live="polite" aria-labelledby="resultTitle"></section>
+<section id="reportBox" class="panel report-card hidden" aria-labelledby="reportTitle">
+  <div><p class="eyebrow">HELP OTHERS STAY SAFE</p><h2 id="reportTitle">Report this item</h2><p class="muted">Share a short description to add it to the community report log.</p></div>
+  <div><label class="sr-only" for="desc">Report description (optional)</label><textarea id="desc" class="form-control" maxlength="1000" placeholder="What happened? (optional)"></textarea><button id="reportBtn" class="button button-outline" type="button">Submit a report <span>→</span></button><p id="reportMsg" class="form-message" role="status" aria-live="polite"></p></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='script.js') }}" defer></script>{% endblock %}

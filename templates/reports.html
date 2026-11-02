@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Community reports{% endblock %}
+{% block breadcrumb %}Community reports{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">COMMUNITY SIGNALS</p><h1>Community reports</h1><p class="page-subtitle">Share suspicious activity and review reports saved in this local workspace.</p></div>
+</section>
+<section class="report-layout">
+  <div class="panel report-form-panel">
+    <div class="panel-heading"><div><p class="eyebrow">SUBMIT A REPORT</p><h2>Help flag a suspicious item</h2></div><span class="report-form-icon">＋</span></div>
+    <form method="post" action="{{ url_for('reports_page') }}">
+      <label for="reportType">Item type</label>
+      <select id="reportType" name="type" class="form-control" required>
+        <option value="">Choose a type</option><option value="url">Website URL</option><option value="email">Email address</option><option value="certificate">Certificate ID</option>
+      </select>
+      <label for="reportValue">Website, email, or ID</label>
+      <input id="reportValue" name="value" class="form-control" maxlength="2048" required placeholder="Enter the suspicious item">
+      <label for="reportDescription">What happened? <span class="muted">(optional)</span></label>
+      <textarea id="reportDescription" name="description" class="form-control" maxlength="1000" rows="4" placeholder="Avoid sharing passwords, codes, or private information."></textarea>
+      <button class="button button-primary report-submit" type="submit">Submit report <span>→</span></button>
+    </form>
+    <p class="privacy-note"><span>◈</span> Reports are stored locally. Do not include passwords, phone numbers, or sensitive personal information.</p>
+  </div>
+  <aside class="report-guidance">
+    <p class="eyebrow">USEFUL TO KNOW</p><h2>Reports are signals, not proof.</h2>
+    <p>A report is a community-submitted claim, not an independently verified finding. Check the evidence and contact organizations through their official channels.</p>
+    <div class="guidance-stat"><span class="guidance-icon">▤</span><span><strong>{{ total }}</strong><small>reports saved in this workspace</small></span></div>
+  </aside>
+</section>
+<section class="panel table-panel reports-list-panel">
+  <div class="panel-heading"><div><p class="eyebrow">REPORT LOG</p><h2>Recent reports</h2></div></div>
+  <div class="filter-bar">
+    <form class="filter-form" method="get" action="{{ url_for('reports_page') }}">
+      <label class="sr-only" for="reportFilterType">Filter reports by type</label>
+      <select id="reportFilterType" name="type" class="filter-control">
+        <option value="all" {% if selected_type == 'all' %}selected{% endif %}>All report types</option>
+        <option value="url" {% if selected_type == 'url' %}selected{% endif %}>Website URLs</option>
+        <option value="email" {% if selected_type == 'email' %}selected{% endif %}>Email addresses</option>
+        <option value="certificate" {% if selected_type == 'certificate' %}selected{% endif %}>Certificates</option>
+      </select>
+      <label class="sr-only" for="reportSearch">Search reports</label>
+      <input id="reportSearch" name="q" class="filter-control search-control" value="{{ search_query }}" placeholder="Search reports">
+      <button class="button button-dark" type="submit">Apply filters</button>
+      {% if selected_type != 'all' or search_query %}<a class="clear-link" href="{{ url_for('reports_page') }}">Clear</a>{% endif %}
+    </form>
+    <span class="result-count">{{ reports|length }} shown</span>
+  </div>
+  {% if reports %}
+  <div class="table-wrap"><table><thead><tr><th>REPORTED ITEM</th><th>TYPE</th><th>COMMUNITY NOTE</th><th>REPORTED AT</th></tr></thead><tbody>
+    {% for report in reports %}
+    <tr><td class="value-cell">{{ report.value }}</td><td><span class="type-chip">{{ report.type }}</span></td><td class="description-cell">{{ report.description or 'No description provided' }}</td><td class="time-cell">{{ report.created_at }}</td></tr>
+    {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="empty-state"><span class="empty-icon">▤</span><strong>No reports found</strong><p>{% if total %}Try adjusting your filters.{% else %}Submitted community reports will be listed here.{% endif %}</p></div>
+  {% endif %}
+</section>
+{% endblock %}

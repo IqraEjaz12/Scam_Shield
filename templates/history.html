@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Check history{% endblock %}
+{% block breadcrumb %}Check history{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">YOUR WORKSPACE</p><h1>Check history</h1><p class="page-subtitle">Review previously scanned items and their risk indicators.</p></div>
+  <a class="button button-primary" href="{{ url_for('check_page') }}">＋ New check</a>
+</section>
+<section class="panel table-panel history-panel">
+  <div class="filter-bar">
+    <form class="filter-form" method="get" action="{{ url_for('history_page') }}">
+      <label class="sr-only" for="historyType">Filter by type</label>
+      <select id="historyType" name="type" class="filter-control">
+        <option value="all" {% if selected_type == 'all' %}selected{% endif %}>All check types</option>
+        <option value="url" {% if selected_type == 'url' %}selected{% endif %}>Website URLs</option>
+        <option value="email" {% if selected_type == 'email' %}selected{% endif %}>Email addresses</option>
+        <option value="certificate" {% if selected_type == 'certificate' %}selected{% endif %}>Certificates</option>
+      </select>
+      <label class="sr-only" for="historySearch">Search history</label>
+      <input id="historySearch" name="q" class="filter-control search-control" value="{{ search_query }}" placeholder="Search checked values">
+      <button class="button button-dark" type="submit">Apply filters</button>
+      {% if selected_type != 'all' or search_query %}<a class="clear-link" href="{{ url_for('history_page') }}">Clear</a>{% endif %}
+    </form>
+    <span class="result-count">{{ checks|length }} shown · {{ total }} total</span>
+  </div>
+  {% if checks %}
+  <div class="table-wrap"><table><thead><tr><th>ITEM CHECKED</th><th>TYPE</th><th>RESULT</th><th>RISK SCORE</th><th>DATE &amp; TIME</th></tr></thead><tbody>
+    {% for item in checks %}
+    <tr><td class="value-cell">{{ item.value }}</td><td><span class="type-chip">{{ item.type }}</span></td><td><span class="verdict-pill {% if item.score >= 60 %}high{% elif item.score >= 30 %}review{% else %}low{% endif %}"><i></i>{{ item.verdict }}</span></td><td><span class="risk-number">{{ item.score }}<small>/100</small></span></td><td class="time-cell">{{ item.created_at }}</td></tr>
+    <tr class="details-row"><td colspan="5"><details class="history-details"><summary>Why this result? <span>{{ item.findings|length }} explanation(s)</span></summary><div class="history-finding-list">
+      {% for finding in item.findings %}
+      <article class="finding {% if item.score >= 60 %}high{% elif item.score < 30 %}low{% endif %}"><h3>{{ finding.title }}</h3><p><strong>Evidence:</strong> {{ finding.evidence }}</p><p><strong>Why it matters:</strong> {{ finding.why }}</p><p><strong>What to do:</strong> {{ finding.action }}</p></article>
+      {% else %}
+      <p class="history-no-details">This scan was saved before detailed explanations were added. Run the check again to see the expanded analysis.</p>
+      {% endfor %}
+    </div></details></td></tr>
+    {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="empty-state"><span class="empty-icon">◷</span><strong>No matching checks</strong><p>{% if total %}Try changing or clearing your filters.{% else %}Your check history will appear here after your first scan.{% endif %}</p>{% if not total %}<a class="text-link" href="{{ url_for('check_page') }}">Run your first check →</a>{% endif %}</div>
+  {% endif %}
+</section>
+<p class="page-note">History is stored in this app's local SQLite database. It is not tied to individual user accounts.</p>
+{% endblock %}

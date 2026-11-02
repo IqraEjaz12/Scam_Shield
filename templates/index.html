@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Check suspicious websites, email addresses, and internship certificate IDs with Scam Shield.">
+  <title>Scam Shield — Verify before you trust</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Scam Shield home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>scam<span class="brand-accent">shield</span></span>
+      </a>
+      <span class="topbar-note"><span class="status-dot"></span> A smarter first check</span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> STAY ONE STEP AHEAD</div>
+        <h1 id="hero-title">Trust, but <span>verify.</span></h1>
+        <p class="hero-copy">A suspicious job offer? An unfamiliar link? Check the warning signs before you click, reply, or share your details.</p>
+      </section>
+
+      <section class="workspace" aria-label="Scam checker">
+        <div class="checker-card">
+          <div class="card-heading">
+            <div>
+              <p class="section-kicker">QUICK CHECK</p>
+              <h2>What would you like to check?</h2>
+            </div>
+            <span class="shield-icon" aria-hidden="true">⌑</span>
+          </div>
+
+          <label for="type">Check type</label>
+          <div class="select-wrap">
+            <select id="type">
+              <option value="url">Website URL</option>
+              <option value="email">Email address</option>
+              <option value="certificate">Internship certificate ID</option>
+            </select>
+            <span aria-hidden="true">⌄</span>
+          </div>
+
+          <label for="value" id="valueLabel">Website address</label>
+          <input id="value" type="text" maxlength="2048" placeholder="e.g. company-careers.com" autocomplete="off" spellcheck="false">
+
+          <div id="extraBox" class="field-group hidden">
+            <label for="extra">Student name <span class="optional">(optional)</span></label>
+            <input id="extra" type="text" maxlength="120" placeholder="Enter the name shown on the certificate" autocomplete="name">
+          </div>
+
+          <button id="checkBtn" class="primary-button" type="button">
+            <span class="button-label">Check for warning signs</span>
+            <span class="button-arrow" aria-hidden="true">→</span>
+          </button>
+          <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+          <p class="privacy-note"><span aria-hidden="true">◈</span> Your check is matched against local rules and reports.</p>
+        </div>
+
+        <div class="side-note">
+          <div class="side-note-icon" aria-hidden="true">✳</div>
+          <h3>Pause before you pay.</h3>
+          <p>Legitimate employers do not ask candidates to pay for a job, interview, or guaranteed placement.</p>
+          <div class="side-divider"></div>
+          <p class="side-small">Never share passwords, one-time codes, or banking details with an unverified contact.</p>
+        </div>
+      </section>
+
+      <section id="result" class="result-card hidden" aria-live="polite" aria-labelledby="resultTitle"></section>
+
+      <section id="reportBox" class="report-card hidden" aria-labelledby="reportTitle">
+        <div>
+          <p class="section-kicker">HELP THE COMMUNITY</p>
+          <h2 id="reportTitle">Seen something suspicious?</h2>
+          <p class="report-copy">Share a short description to help keep a record of reports.</p>
+        </div>
+        <div class="report-action">
+          <label class="sr-only" for="desc">Report description (optional)</label>
+          <textarea id="desc" maxlength="1000" placeholder="What happened? (optional)"></textarea>
+          <button id="reportBtn" class="secondary-button" type="button">Submit report <span aria-hidden="true">→</span></button>
+          <p id="reportMsg" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span class="footer-brand">scam<span class="brand-accent">shield</span></span>
+      <p>This tool is an initial screening aid, not a guarantee. A low-risk result does not prove something is genuine. Confirm directly with the organization using contact details you find independently.</p>
+    </footer>
+  </div>
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>
