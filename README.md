@@ -36,6 +36,21 @@ Then open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
 The app creates `database.db` in the project directory on startup. It stores check history and reports locally; it is not associated with individual user accounts.
 
+## Keep the local website running on Windows
+
+To start Scam Shield automatically when you sign in to Windows and open it in your browser, run this once from PowerShell in the project directory:
+
+```powershell
+$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$PWD\start_scam_shield.ps1`""
+$trigger = New-ScheduledTaskTrigger -AtLogOn -User "$env:USERDOMAIN\$env:USERNAME"
+$settings = New-ScheduledTaskSettingsSet -MultipleInstances IgnoreNew -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+$principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -LogonType Interactive -RunLevel Limited
+Register-ScheduledTask -TaskName "Scam Shield Local Website" -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force
+Start-ScheduledTask -TaskName "Scam Shield Local Website"
+```
+
+The background task restarts the local app if it stops. Server logs are saved under `%LOCALAPPDATA%\ScamShield\logs`. The `127.0.0.1` address is private to this computer; the site is unavailable while the computer is off or asleep and is not public internet hosting.
+
 ## Privacy notes
 
 - Certificate images are processed in the browser and are not uploaded. Recognized text is sent to the local app for analysis.
@@ -46,6 +61,7 @@ The app creates `database.db` in the project directory on startup. It stores che
 
 ```text
 app.py                 Flask app, local SQLite storage, and checking logic
+start_scam_shield.ps1  Windows local server and browser auto-start
 static/
   script.js            Browser interactions and certificate-image OCR
   style.css            App styles
