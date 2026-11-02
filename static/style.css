@@ -138,6 +138,12 @@ td { padding: 12px 14px; border-top: 1px solid #eff2f6; color: #647187; font-siz
 .risk-number { color: #334159; font-weight: 700; white-space: nowrap; }
 .risk-number small { margin-left: 2px; color: #9ba5b3; font-size: .58rem; font-weight: 500; }
 .time-cell { color: #8692a3; white-space: nowrap; }
+.risk-guide-panel { margin-bottom: 17px; padding: 19px 0 0; overflow: hidden; }
+.risk-guide-panel > .panel-heading { padding: 0 21px; }
+.risk-guide-table { min-width: 700px; }
+.risk-guide-table td { line-height: 1.5; }
+.risk-guide-table td:nth-child(2) { white-space: nowrap; }
+.risk-guide-note { margin: 0; padding: 13px 21px 16px; color: #78859a; font-size: .68rem; line-height: 1.55; }
 .description-cell { max-width: 320px; color: #758196; line-height: 1.5; }
 .empty-state { display: flex; flex-direction: column; align-items: center; padding: 32px 18px 37px; text-align: center; }
 .empty-icon { width: 40px; height: 40px; display: grid; place-items: center; margin-bottom: 10px; border-radius: 12px; background: #eff8f4; color: #258960; font-size: 1.15rem; }
@@ -290,6 +296,9 @@ select.form-control { appearance: auto; }
   .panel { padding-right: 15px; padding-left: 15px; }
   .table-panel { padding-right: 0; padding-left: 0; }
   .table-panel > .panel-heading { padding-right: 15px; padding-left: 15px; }
+  .risk-guide-panel { padding-right: 0; padding-left: 0; }
+  .risk-guide-panel > .panel-heading { padding-right: 15px; padding-left: 15px; }
+  .risk-guide-note { padding-right: 15px; padding-left: 15px; }
   .dashboard-grid, .scan-layout, .report-layout { grid-template-columns: 1fr; }
   .scan-panel, .report-form-panel { padding: 21px 17px; }
   .filter-bar { align-items: flex-start; flex-direction: column; padding: 11px 14px; }
