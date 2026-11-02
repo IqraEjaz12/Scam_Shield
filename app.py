@@ -12,7 +12,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, url
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DB = BASE_DIR / "database.db"
+DB = Path(os.environ.get("SCAM_SHIELD_DB_PATH", BASE_DIR / "database.db"))
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SCAM_SHIELD_SECRET") or secrets.token_hex(32)

@@ -18,7 +18,7 @@ Checks use local heuristics and data saved in this app; they do not query an ext
 ## Requirements
 
 - Python 3
-- Flask
+- Dependencies listed in `requirements.txt`
 - An internet connection to load the browser-based OCR library and English language data when scanning certificate images
 
 ## Run locally
@@ -28,7 +28,7 @@ From the project directory, create and activate a virtual environment, install F
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install Flask
+python -m pip install -r requirements.txt
 python app.py
 ```
 
@@ -37,6 +37,26 @@ Then open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 The app creates `database.db` in the project directory on startup. It stores check history and reports locally; it is not associated with individual user accounts.
 
 Source files use UTF-8, and the VS Code workspace is configured to open text files with that encoding. `database.db` is a binary SQLite database, not a text or source-code file; inspect it with a SQLite viewer or through the app rather than opening it as text.
+
+## Public website, domain, and HTTPS
+
+The suggested domain is **`scamshieldcheck.com`**. This is only a name suggestion; its availability and price have not been verified. Check with a domain registrar and purchase it before configuring DNS. A domain name alone does not publish the app.
+
+The messages about HTTP and numeric IP addresses describe the **URL entered into the checker**. They do not mean the Scam Shield app itself is exposed on that address. `http://127.0.0.1:5000` is a local development address that works only on this computer. The public deployment below gets its own HTTPS address; the custom domain works after you purchase it and point its DNS to the host.
+
+### Deploy on Render
+
+1. Push the project to GitHub, then create a Python **Web Service** on [Render](https://render.com/) connected to that repository.
+2. Set the build command to `pip install -r requirements.txt` and the start command to `gunicorn app:app --bind 0.0.0.0:$PORT --workers 1`.
+3. Use a Render plan that supports a persistent disk. Attach a disk mounted at `/var/data`, with at least 1 GB, and add these environment variables:
+   - `SCAM_SHIELD_DB_PATH` = `/var/data/database.db`
+   - `SCAM_SHIELD_SECRET` = a new, long random secret; generate one with `python -c "import secrets; print(secrets.token_hex(32))"` and save it as a secret in Render.
+4. Deploy and test the HTTPS `onrender.com` address Render assigns to the service.
+5. After buying `scamshieldcheck.com`, add it under the service's **Settings → Custom Domains**. Configure the DNS records exactly as Render instructs at your registrar, then wait for domain verification and the HTTPS certificate to become active. Do not assume the domain is live until both DNS and HTTPS have been verified.
+
+See Render's [Flask deployment guide](https://render.com/docs/deploy-flask) and [custom domain guide](https://render.com/docs/custom-domains) for the current dashboard and DNS instructions.
+
+The deployment uses a separate database from your local `database.db`. Its check history and community reports are shared with visitors to the public site; there are no user accounts or per-user privacy controls. Do not submit passwords, payment details, private documents, or other sensitive information. Keep the persistent disk attached so saved data survives service restarts.
 
 ## Keep the local website running on Windows
 
